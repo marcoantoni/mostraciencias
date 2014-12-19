@@ -10,6 +10,9 @@
 				@foreach ($noticias as $noticia)
 					<section class="col-md-4">
 						<h2>{{ $noticia->titulo }}</h2>
+						<!--@if ($noticia->ehImagem == 1)
+							<img src="http://127.0.0.1:8000/uploads/1418994596.png" alt="{{ $noticia->descricao }}" >
+						@endif-->
 						{{ $noticia->texto }}
 						<table>
 							<tr>
