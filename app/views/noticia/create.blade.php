@@ -60,8 +60,7 @@
 		<!-- /TinyMCE -->
 		<div class="row">
 			<div class="col-md-8">
-				{{ Form::open(array('route' => 'noticias.store', 'class' => 'form', 'role' => 'form')) }}
-				<!--<form role="form">-->
+				{{ Form::open(array('route' => 'noticias.store', 'class' => 'form', 'role' => 'form', 'files' => true)) }}
 					<div class="form-group"> 
 						<label for="titulo">Titulo</label> 
 						<input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título">
@@ -70,17 +69,23 @@
 						<label for="noticia">Noticia</label> 
 						<textarea class="form-control" rows="3" id="texto" name="texto"></textarea>
 					</div>
+					<fieldset>
 					<div class="form-group">
-						<label for="imagem">Imagem</label> 
-						<input type="file" class="form-control" style="border: 0px;">
 						<label for="descricao">Descrição</label>
-						<input type="text" class="form-control" id="alt" placeholder="Descrição da imagem">
+						<input type="text" class="form-control" placeholder="Descrição da imagem" id="alt" name="alt">
+						<label for="imagem">Imagem</label> 
+						<input type="file" class="form-control" id="arquivo" name="arquivo">					
 					</div>
 					<div class="form-group">
 						<label for="status">Status da publicação</label>
 						<div class="radio"> 
 							<label> <input type="radio" name="status" id="status" value="1" checked> Exibir </label> 
 							<label> <input type="radio" name="status" id="status" value="0"> Não exibir </label> 
+						</div>
+						<label for="status">Exibir na galeria</label>
+						<div class="radio"> 
+							<label> <input type="radio" name="exibir_galeria" id="exibir_galeria" value="1"> Sim </label> 
+							<label> <input type="radio" name="exibir_galeria" id="exibir_galeria" value="0" checked> Não  </label> 
 						</div>
 					</div>
 					<div class="form-group">

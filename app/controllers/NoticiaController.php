@@ -4,10 +4,14 @@ class NoticiaController extends BaseController {
 
 	public function __construct() {
 		$noticia = new Noticia();
+	
 	}
 
 	public function index(){
-		$noticias = Noticia::get();
+	
+		$noticias = Noticia::Buscar();
+		//$queries = DB::getQueryLog(); 
+		//return end($queries);
 		return View::make('noticia.index', compact('noticias'));
 	}
 	public function create(){
@@ -18,14 +22,38 @@ class NoticiaController extends BaseController {
 		$noticia = new Noticia();
 		$noticia->titulo = Input::get('titulo');
 		$noticia->texto = Input::get('texto');
-		$noticia->status = Input::get('status');;
+		$noticia->status = Input::get('status');
 	
 		$noticia->id_edicao = 1;
+	
+		if(Input::hasFile('arquivo')){
+			$file = Input::file('arquivo'); 
+			$destinationPath = '/home/marco/dev/mostraciencias/public/uploads/'; 
+			$filename = $file->getClientOriginalName(); 
+			$extension = Input::file('arquivo')->getClientOriginalExtension();
+			$newfilename = time() . '.' . $extension;
+			Input::file('arquivo')->move($destinationPath, $newfilename);	
+			
+			$arquivo = new Arquivo();
+			$arquivo->filename = $newfilename;
+			$arquivo->descricao = Input::get('alt');
+			$arquivo->id_edicao = 1;
+			
+			$extensoes = array('gif', 'jpeg', 'jpg', 'png'); // extensoes permitidas 
+			if (in_array($extension, $extensoes)) 
+				$arquivo->ehImagem = 1;
+			else
+				$arquivo->ehImagem = 0;
+
+			$arquivo->exibir_galeria = Input::get('exibir_galeria');
+			$arquivo->save();
+			$noticia->id_arquivo = DB::table('arquivos')->max('id');
+		}
 	
 		//$noticia->id_usuario = Auth::id();
 	
 		$noticia->save();
-		//return Redirect::route('noticia.index');
+		return View::make('sucesso');
 	}
 	
 	public function show($id)
@@ -38,7 +66,6 @@ class NoticiaController extends BaseController {
 	public function edit($id)
 	{
 		$noticia = Noticia::find($id);
-		//return View::make('noticia.edit')->with('noticias', $noticia);
 		return View::make('noticia.edit', compact('noticia'));
 	}
 
