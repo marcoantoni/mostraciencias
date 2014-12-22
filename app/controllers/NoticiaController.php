@@ -2,29 +2,35 @@
 
 class NoticiaController extends BaseController {
 
+	protected $noticia;
+
 	public function __construct() {
-		$noticia = new Noticia();
-	
+		$this->noticia = new Noticia();
 	}
 
-	public function index(){
-	
+	public function index(){	
 		$noticias = Noticia::Buscar();
-		//$queries = DB::getQueryLog(); 
-		//return end($queries);
 		return View::make('noticia.index', compact('noticias'));
 	}
+
 	public function create(){
 		return View::make('noticia.create');
 	}
 	
 	public function store(){
-		$noticia = new Noticia();
-		$noticia->titulo = Input::get('titulo');
-		$noticia->texto = Input::get('texto');
-		$noticia->status = Input::get('status');
+		$input = Input::all();
+
+		//$this->noticia->fill($input);
+
+		$this->noticia->titulo = Input::get('titulo');
+		$this->noticia->texto = Input::get('texto');
+		$this->noticia->status = Input::get('status');
 	
-		$noticia->id_edicao = 1;
+		$this->noticia->id_edicao = 1;
+
+		if(!$this->noticia->isValid()){
+			return Redirect::back()->withInput()->withErrors($this->noticia->errors);
+		}
 	
 		if(Input::hasFile('arquivo')){
 			$file = Input::file('arquivo'); 
@@ -47,19 +53,19 @@ class NoticiaController extends BaseController {
 
 			$arquivo->exibir_galeria = Input::get('exibir_galeria');
 			$arquivo->save();
-			$noticia->id_arquivo = DB::table('arquivos')->max('id');
+			$this->noticia->id_arquivo = DB::table('arquivos')->max('id');
 		}
 	
 		//$noticia->id_usuario = Auth::id();
 	
-		$noticia->save();
+		$this->noticia->save();
 		return View::make('sucesso');
 	}
 	
 	public function show($id)
 	{
-		//$user = User::find($id);
-		//return View::make('users.show')->with('user', $user);
+		$noticia = Noticia::find($id);
+		return View::make('noticia.show', compact('noticia'));
 	}
 
 
@@ -71,17 +77,21 @@ class NoticiaController extends BaseController {
 
 	public function update($id)
 	{
-		$noticia = new Noticia();
-		$noticia = Noticia::find($id);
-		$noticia->titulo = Input::get('titulo');
-		$noticia->texto = Input::get('texto');
-		$noticia->status = Input::get('status');;
 	
-		$noticia->id_edicao = 1;
+		$this->noticia = Noticia::find($id);
+		$this->noticia->titulo = Input::get('titulo');
+		$this->noticia->texto = Input::get('texto');
+		$this->noticia->status = Input::get('status');;
 	
+		$this->noticia->id_edicao = 1;
+	
+		if(!$this->noticia->isValid()){
+			return Redirect::back()->withInput()->withErrors($this->noticia->errors);
+		}
+
 		//$noticia->id_usuario = Auth::id();
 	
-		$noticia->save();
+		$this->noticia->save();
 		
 		return Redirect::route('noticias.index');
 	}

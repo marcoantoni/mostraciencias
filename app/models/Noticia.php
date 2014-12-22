@@ -9,6 +9,7 @@ class Noticia extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 	protected $table = 'noticias';
+<<<<<<< HEAD
 	public $errors;
     public $rules = [
 			'titulo' => 'required',
@@ -33,4 +34,15 @@ class Noticia extends Eloquent implements UserInterface, RemindableInterface {
 		
 		return false;
 	}
+=======
+	
+	public function scopeBuscar($query)
+        {
+            return $query
+            ->Leftjoin('arquivos', 'arquivos.id', '=' , 'noticias.id_arquivo')
+            ->select('noticias.id', 'noticias.titulo', 'noticias.texto', 'noticias.status', 'arquivos.filename', 'arquivos.descricao', 'arquivos.ehImagem')
+            ->get();
+        }
+	
+>>>>>>> f0561a0693fb8b111417b3d254148301fe403155
 }
