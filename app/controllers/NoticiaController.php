@@ -56,7 +56,7 @@ class NoticiaController extends BaseController {
 			$this->noticia->id_arquivo = DB::table('arquivos')->max('id');
 		}
 	
-		//$noticia->id_usuario = Auth::id();
+		$this->noticia->id_user = Auth::id();
 	
 		$this->noticia->save();
 		return View::make('sucesso');

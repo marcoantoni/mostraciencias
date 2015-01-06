@@ -43,6 +43,7 @@
             <li><a href="#">One more separated link</a></li>
           </ul>
         </li>
+        <li>@if (Auth::check()) <a href="{{ url('sair') }}" >Sair</a> @endif</li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
